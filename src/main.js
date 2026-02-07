@@ -41,8 +41,8 @@ function render(action) {
 const sampleTable = initTable({
     tableTemplate: 'table',
     rowTemplate: 'row',
-    before: [],
-    after: []
+    before: ['search', 'header', 'filter'],
+    after: ['pagination']
 }, render);
 
 // @todo: инициализация
