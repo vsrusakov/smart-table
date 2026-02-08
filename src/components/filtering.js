@@ -1,7 +1,35 @@
-import {createComparison, defaultRules} from "../lib/compare.js";
+import {createComparison} from "../lib/compare.js";
 
 // @todo: #4.3 — настроить компаратор
-const compare = createComparison(defaultRules);
+const defaultRules = [
+    // 'skipNonExistentSourceFields',
+    'skipEmptyTargetValues',
+    // 'failOnEmptySource',
+    'arrayAsRange',
+    'stringIncludes',
+    'exactEquality'
+];
+const compareTotalFrom = (key, sourceValue, targetValue, source, target) => {
+    if (key === 'totalFrom' && targetValue) {
+        const minTotal = parseInt(targetValue);
+        if (!isNaN(minTotal)) {
+            return { result: source.total >= minTotal };
+        }
+    }
+    return { continue: true };
+}
+
+const compareTotalTo = (key, sourceValue, targetValue, source, target) => {
+    if (key === 'totalTo' && targetValue) {
+        const maxTotal = parseInt(targetValue);
+        if (!isNaN(maxTotal)) {
+            return { result: source.total <= maxTotal };
+        }
+    }
+    return { continue: true };
+}
+
+const compare = createComparison(defaultRules, [compareTotalFrom, compareTotalTo]);
 
 export function initFiltering(elements, indexes) {
     // @todo: #4.1 — заполнить выпадающие списки опциями
