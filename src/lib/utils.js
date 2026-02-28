@@ -46,7 +46,17 @@ export function cloneTemplate(templateId) {
 export function processFormData(formData) {
     // Преобразуем entries() в массив пар [ключ, значение] и создаем объект
     return Array.from(formData.entries()).reduce((result, [key, value]) => {
-        result[key] = value;
+        
+        if (key !== 'totalFrom' || key !== 'totalTo') {
+            result[key] = value;
+        }
+
+        if (!result['total']) result['total'] = [-Infinity, Infinity];
+
+        if(key === 'totalFrom') result['total'][0] = +value || -Infinity;
+
+        if(key === 'totalTo') result['total'][1] = +value || Infinity;
+
         return result;
     }, {});
 }
